@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PensionManagement1.Models
+namespace PensionManagement1.Models.DbsetModel
 {
     public class Beneficary
     {
-        
+
         [Key]
         public int BeneficaryId { get; set; }
 
@@ -28,6 +28,6 @@ namespace PensionManagement1.Models
 
         [ForeignKey("Pensioner")]
         public int PensionerId { get; set; }
-        public Pensioner Pensioner { get; set; } 
+        public Pensioner Pensioner { get; set; }
     }
 }

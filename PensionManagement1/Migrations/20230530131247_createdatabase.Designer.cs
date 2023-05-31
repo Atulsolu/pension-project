@@ -12,8 +12,8 @@ using PensionManagement1.Context;
 namespace PensionManagement1.Migrations
 {
     [DbContext(typeof(PensionContext))]
-    [Migration("20230524070542_DataAnnotation")]
-    partial class DataAnnotation
+    [Migration("20230530131247_createdatabase")]
+    partial class createdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace PensionManagement1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PensionManagement1.Models.Admin", b =>
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Admin", b =>
                 {
                     b.Property<int>("AdminId")
                         .ValueGeneratedOnAdd()
@@ -47,7 +47,7 @@ namespace PensionManagement1.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("PensionManagement1.Models.Beneficary", b =>
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Beneficary", b =>
                 {
                     b.Property<int>("BeneficaryId")
                         .ValueGeneratedOnAdd()
@@ -79,31 +79,7 @@ namespace PensionManagement1.Migrations
                     b.ToTable("Beneficaries");
                 });
 
-            modelBuilder.Entity("PensionManagement1.Models.PensionPayout", b =>
-                {
-                    b.Property<int>("PayoutId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PayoutId"));
-
-                    b.Property<int>("PayoutAmount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PayoutDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PensionerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PayoutId");
-
-                    b.HasIndex("PensionerId");
-
-                    b.ToTable("PensionPayouts");
-                });
-
-            modelBuilder.Entity("PensionManagement1.Models.Pensioner", b =>
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Pensioner", b =>
                 {
                     b.Property<int>("PensionerId")
                         .ValueGeneratedOnAdd()
@@ -143,6 +119,9 @@ namespace PensionManagement1.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
+                    b.Property<int>("PlanId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Retirement_date")
                         .HasColumnType("datetime2");
 
@@ -153,10 +132,12 @@ namespace PensionManagement1.Migrations
 
                     b.HasIndex("AdminId");
 
+                    b.HasIndex("PlanId");
+
                     b.ToTable("Pensioners");
                 });
 
-            modelBuilder.Entity("PensionManagement1.Models.RetirementPlan", b =>
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.RetirementPlan", b =>
                 {
                     b.Property<int>("PlanId")
                         .ValueGeneratedOnAdd()
@@ -164,26 +145,45 @@ namespace PensionManagement1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanId"));
 
-                    b.Property<int>("PensionerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PlanName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlanType")
-                        .HasColumnType("int");
-
                     b.HasKey("PlanId");
-
-                    b.HasIndex("PensionerId");
 
                     b.ToTable("RetirementPlans");
                 });
 
-            modelBuilder.Entity("PensionManagement1.Models.Beneficary", b =>
+            modelBuilder.Entity("PensionManagement1.Models.PensionPayout", b =>
                 {
-                    b.HasOne("PensionManagement1.Models.Pensioner", "Pensioner")
+                    b.Property<int>("PayoutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PayoutId"));
+
+                    b.Property<int>("PayoutAmount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PayoutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PensionerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("TotalAmount")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("PayoutId");
+
+                    b.HasIndex("PensionerId");
+
+                    b.ToTable("PensionPayouts");
+                });
+
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Beneficary", b =>
+                {
+                    b.HasOne("PensionManagement1.Models.DbsetModel.Pensioner", "Pensioner")
                         .WithMany("Beneficaries")
                         .HasForeignKey("PensionerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -192,9 +192,28 @@ namespace PensionManagement1.Migrations
                     b.Navigation("Pensioner");
                 });
 
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Pensioner", b =>
+                {
+                    b.HasOne("PensionManagement1.Models.DbsetModel.Admin", "Admin")
+                        .WithMany("Pensioners")
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PensionManagement1.Models.DbsetModel.RetirementPlan", "RetirementPlan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("RetirementPlan");
+                });
+
             modelBuilder.Entity("PensionManagement1.Models.PensionPayout", b =>
                 {
-                    b.HasOne("PensionManagement1.Models.Pensioner", "Pensioner")
+                    b.HasOne("PensionManagement1.Models.DbsetModel.Pensioner", "Pensioner")
                         .WithMany("PensionPayouts")
                         .HasForeignKey("PensionerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -203,40 +222,16 @@ namespace PensionManagement1.Migrations
                     b.Navigation("Pensioner");
                 });
 
-            modelBuilder.Entity("PensionManagement1.Models.Pensioner", b =>
-                {
-                    b.HasOne("PensionManagement1.Models.Admin", "Admin")
-                        .WithMany("Pensioners")
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-                });
-
-            modelBuilder.Entity("PensionManagement1.Models.RetirementPlan", b =>
-                {
-                    b.HasOne("PensionManagement1.Models.Pensioner", "Pensioner")
-                        .WithMany("RetirementPlans")
-                        .HasForeignKey("PensionerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pensioner");
-                });
-
-            modelBuilder.Entity("PensionManagement1.Models.Admin", b =>
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Admin", b =>
                 {
                     b.Navigation("Pensioners");
                 });
 
-            modelBuilder.Entity("PensionManagement1.Models.Pensioner", b =>
+            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.Pensioner", b =>
                 {
                     b.Navigation("Beneficaries");
 
                     b.Navigation("PensionPayouts");
-
-                    b.Navigation("RetirementPlans");
                 });
 #pragma warning restore 612, 618
         }

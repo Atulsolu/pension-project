@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PensionManagement1.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDatabase : Migration
+    public partial class createdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,11 +18,24 @@ namespace PensionManagement1.Migrations
                     AdminId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Admin_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Admin_Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Admin_Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Admins", x => x.AdminId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RetirementPlans",
+                columns: table => new
+                {
+                    PlanId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RetirementPlans", x => x.PlanId);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,14 +45,15 @@ namespace PensionManagement1.Migrations
                     PensionerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Pensioner_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Pensioner_Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    First_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Last_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Pensioner_Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    First_name = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Last_name = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DOJ = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Retirement_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Salary = table.Column<int>(type: "int", nullable: false),
+                    PlanId = table.Column<int>(type: "int", nullable: false),
                     AdminId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -51,6 +65,12 @@ namespace PensionManagement1.Migrations
                         principalTable: "Admins",
                         principalColumn: "AdminId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pensioners_RetirementPlans_PlanId",
+                        column: x => x.PlanId,
+                        principalTable: "RetirementPlans",
+                        principalColumn: "PlanId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,8 +79,8 @@ namespace PensionManagement1.Migrations
                 {
                     BeneficaryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BeneficaryFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BeneficaryLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BeneficaryFirstName = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    BeneficaryLastName = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Relation = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PensionerId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -82,6 +102,7 @@ namespace PensionManagement1.Migrations
                     PayoutId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PayoutAmount = table.Column<int>(type: "int", nullable: false),
+                    TotalAmount = table.Column<long>(type: "bigint", nullable: false),
                     PayoutDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PensionerId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -90,27 +111,6 @@ namespace PensionManagement1.Migrations
                     table.PrimaryKey("PK_PensionPayouts", x => x.PayoutId);
                     table.ForeignKey(
                         name: "FK_PensionPayouts_Pensioners_PensionerId",
-                        column: x => x.PensionerId,
-                        principalTable: "Pensioners",
-                        principalColumn: "PensionerId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RetirementPlans",
-                columns: table => new
-                {
-                    PlanId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlanType = table.Column<int>(type: "int", nullable: false),
-                    PensionerId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RetirementPlans", x => x.PlanId);
-                    table.ForeignKey(
-                        name: "FK_RetirementPlans_Pensioners_PensionerId",
                         column: x => x.PensionerId,
                         principalTable: "Pensioners",
                         principalColumn: "PensionerId",
@@ -128,13 +128,13 @@ namespace PensionManagement1.Migrations
                 column: "AdminId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PensionPayouts_PensionerId",
-                table: "PensionPayouts",
-                column: "PensionerId");
+                name: "IX_Pensioners_PlanId",
+                table: "Pensioners",
+                column: "PlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RetirementPlans_PensionerId",
-                table: "RetirementPlans",
+                name: "IX_PensionPayouts_PensionerId",
+                table: "PensionPayouts",
                 column: "PensionerId");
         }
 
@@ -148,13 +148,13 @@ namespace PensionManagement1.Migrations
                 name: "PensionPayouts");
 
             migrationBuilder.DropTable(
-                name: "RetirementPlans");
-
-            migrationBuilder.DropTable(
                 name: "Pensioners");
 
             migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "RetirementPlans");
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PensionManagement1.Context;
-using PensionManagement1.Models;
-using PensionManagement1.Controllers.emptyclass;
+using PensionManagement1.Models.DbsetModel;
+using PensionManagement1.Models.ViewModel;
 
 namespace PensionManagement1.Controllers
 {
@@ -19,18 +19,24 @@ namespace PensionManagement1.Controllers
         }
         //Adding Beneficary By Pensioner Id
         [HttpPost("AddingBeneficiary")]
-        public IActionResult AddBeneficiary(Beneficary beneficary)
+        public IActionResult AddBeneficiary(int Pensionerid,BeneficaryDetail beneficary)
         {
-            var Pensioner = _dbContext.Pensioners.Find(beneficary.PensionerId);
+            var Pensioner = _dbContext.Pensioners.Find(Pensionerid);
             if (Pensioner == null) 
             {
                 return NotFound("Pensioner Not Exist");
             }
-            _dbContext.Beneficaries.Add(beneficary);
+            var beneficary1 = new Beneficary();
+            beneficary1.BeneficaryFirstName = beneficary.BeneficaryFirstName;
+            beneficary1.BeneficaryLastName = beneficary.BeneficaryLastName;
+            beneficary1.Relation = beneficary.BeneficaryRelation;
+            beneficary1.PensionerId = beneficary.PensionerId;
+            _dbContext.Beneficaries.Add(beneficary1);
             _dbContext.SaveChanges();
             return Ok("Beneficary Added Successfully");
         }
         //Getting Beneficary By Pensioner Id
+        [Authorize]
         [HttpGet("[action]")]
         public IActionResult GetBeneficary(int PensionerId)
         {
@@ -43,10 +49,10 @@ namespace PensionManagement1.Controllers
             var beneficary = _dbContext.Beneficaries.Where(b => b.PensionerId == PensionerId)
                 .Select(b => new BeneficaryDetail
                 {
-                    BeneficiaryId = b.PensionerId,
-                    BeneficiaryFirstName = b.BeneficaryFirstName,
-                    BeneficiaryLastName = b.BeneficaryLastName,
-                    BeneficiaryRelation = b.Relation
+                    BeneficaryId = b.BeneficaryId,
+                    BeneficaryFirstName = b.BeneficaryFirstName,
+                    BeneficaryLastName = b.BeneficaryLastName,
+                    BeneficaryRelation = b.Relation
                 }).ToList();
             if(beneficary.Count==0)
             {
@@ -55,16 +61,40 @@ namespace PensionManagement1.Controllers
             return Ok(beneficary);
 
         }
+        //Update Beneficary
+        [HttpPut("UpdateBeneficaryByPensionerId")]
+        public IActionResult UpdatePensioner(int PensionerId,int BeneficaryId,BeneficaryDetail ben)
+        {
+
+            var CurrentBeneficary = _dbContext.Beneficaries.FirstOrDefault(b => b.PensionerId == PensionerId && b.BeneficaryId == BeneficaryId);
+            if (CurrentBeneficary != null)
+            {
+
+                CurrentBeneficary.BeneficaryFirstName = ben.BeneficaryFirstName;
+                CurrentBeneficary.BeneficaryLastName = ben.BeneficaryLastName;
+                CurrentBeneficary.Relation = ben.BeneficaryRelation;
+              
+                _dbContext.SaveChanges();
+                return Ok("Beneficary Updated Successfully");
+            }
+            return NotFound("Beneficary Not Found");
+
+
+        }
+
+
+
         //Deleting Beneficary By Pensioner Id
-        [HttpDelete]
-        public IActionResult DeleteBeneficary(int PensionerId,int Benificaryid) 
+        [Authorize]
+        [HttpDelete("Delete BeneficaryByPensionerId")]
+        public IActionResult DeleteBeneficary(int PensionerId,int Beneficaryid) 
         {
             var CurrentPensioner = _dbContext.Pensioners.Find(PensionerId);
             if(CurrentPensioner == null) 
             {
                 return NotFound("Pensioner Not Exist");
             }
-            var beneficary = _dbContext.Beneficaries.FirstOrDefault(b => b.PensionerId == PensionerId && b.BeneficaryId == Benificaryid);
+            var beneficary = _dbContext.Beneficaries.FirstOrDefault(b => b.PensionerId == PensionerId && b.BeneficaryId == Beneficaryid);
             if (beneficary == null)
             {
                 return NotFound("No Beneficary Found");

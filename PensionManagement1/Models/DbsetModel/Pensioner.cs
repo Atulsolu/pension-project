@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace PensionManagement1.Models
+namespace PensionManagement1.Models.DbsetModel
 {
     public class Pensioner
     {
-       
-        
+
+
         [Key]
         public int PensionerId { get; set; }
 
@@ -33,15 +33,15 @@ namespace PensionManagement1.Models
         [Required(ErrorMessage = "Last Name Can't be Blank")]
         [RegularExpression(@"^[A-Z][a-zA-Z]*$", ErrorMessage = "First letter should be Uppercase and no space between letters")]
         [MaxLength(15), MinLength(3)]
-        public string Last_name { get; set;}
+        public string Last_name { get; set; }
 
         [Required(ErrorMessage = "Please Provide Valid Date")]
         [DisplayName("Date Of Birth")]
-        public DateTime DOB { get; set;}
+        public DateTime DOB { get; set; }
 
         [DisplayName("Gender")]
         [Required(ErrorMessage = "Gender Can't be Blank")]
-        public string Gender { get;set; }
+        public string Gender { get; set; }
 
         [Required(ErrorMessage = "Please Provide Valid Date")]
         [DisplayName("Date Of Joining")]
@@ -55,10 +55,14 @@ namespace PensionManagement1.Models
         [DisplayName("Salary Earned")]
         [Required(ErrorMessage = "Salary Earned can`t be blank")]
         public int Salary { get; set; }
-      
-        public ICollection<Beneficary> Beneficaries { get; set;}
-        public ICollection<RetirementPlan> RetirementPlans { get; set;}
-        public ICollection<PensionPayout> PensionPayouts { get; set;}
+
+        public ICollection<Beneficary> Beneficaries { get; set; }
+        public ICollection<PensionPayout> PensionPayouts { get; set; }
+
+        [ForeignKey("RetirementPlan")]
+        public int PlanId { get; set; }
+        public RetirementPlan RetirementPlan { get; set;}
+
         [ForeignKey("Admin")]
         public int AdminId { get; set; }
         public Admin Admin { get; set; }

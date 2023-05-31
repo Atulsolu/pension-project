@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PensionManagement1.Context;
-using PensionManagement1.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -28,10 +25,14 @@ namespace PensionManagement1.Controllers
        
         public IActionResult AdminLogin(string Email,string Password)
         {
-            var CurrentAdmin=_dbContext.Admins.FirstOrDefault(a=>a.Admin_Email==Email && a.Admin_Password==Password);
-            if(CurrentAdmin==null)
+            var CurrentAdmin=_dbContext.Admins.FirstOrDefault(a=>a.Admin_Email==Email);
+            if(CurrentAdmin.Admin_Email != Email)
             {
-                return NotFound("Admin Not Exist");
+                return NotFound("Admin Not Found");
+            }
+            if(CurrentAdmin.Admin_Password != Password)
+            {
+                return NotFound("Incorrect Password");
             }
             var SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
             var Credntials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256);
@@ -46,7 +47,7 @@ namespace PensionManagement1.Controllers
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: Credntials);
             var Jwt = new JwtSecurityTokenHandler().WriteToken(Token);
-            return Ok(Jwt);
+            return Ok(new { Token = Jwt, Message = "Admin Login Successfully" });
 
         }
 
