@@ -9,6 +9,7 @@ namespace PensionManagement1.Models.ViewModel
         public int PlanId { get; set; }
        
         public string PlanName { get; set; }
+        public string PlanDescription { get; set; }
      
     }
 }

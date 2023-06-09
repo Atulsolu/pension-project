@@ -7,6 +7,7 @@ using System.Text;
 using PensionManagement1.Models.ViewModel;
 using PensionManagement1.Models.DbsetModel;
 using Microsoft.AspNetCore.Authorization;
+using PensionManagement1.Models.CrudModel;
 
 namespace PensionManagement1.Controllers
 {
@@ -22,12 +23,12 @@ namespace PensionManagement1.Controllers
         }
         //Pensioner Registration
         [HttpPost("[action]")]
-        public IActionResult PensionerRegister(string Pensioner_Email,PensionerDetails pensioner)
+        public IActionResult PensionerRegister(PensionerRegister pensioner)
         {
             var PensionerExist=_dbContext.Pensioners.FirstOrDefault(p=>p.Pensioner_Email==pensioner.Pensioner_Email);
             if (PensionerExist!=null)
             {
-                return Ok("Pensioner Alraedy Exist");
+                return Ok("Pensioner Already Registered");
             }
             // var Admin = _dbContext.Admins.Find(1);
             // pensioner.Admin= Admin;
@@ -42,11 +43,22 @@ namespace PensionManagement1.Controllers
             Newpensioner.Retirement_date=pensioner.Retirement_date;
             Newpensioner.Salary=pensioner.Salary;
             Newpensioner.AdminId=pensioner.AdminId;
-            Newpensioner.PlanId = pensioner.PlanId;
+            TimeSpan ts = pensioner.Retirement_date - pensioner.DOJ;
+            if (ts.TotalDays / 365 > 25)
+            {
+                Newpensioner.PlanId = 1;
+            }
+            else
+            {
+                Newpensioner.PlanId = 2;
+            }
+           
            
             _dbContext.Pensioners.Add(Newpensioner);
             _dbContext.SaveChanges();
             return Ok("Pensioner Successfully Registered");
+            
+            
         }
         //PensionerLogin
         [HttpPost("[action]")]
@@ -82,7 +94,7 @@ namespace PensionManagement1.Controllers
         [HttpGet("PensionerList")]
         public IActionResult PensionerList()
         {
-            var pensionerdetails = _dbContext.Pensioners.Select(p => new PensionerDetails
+            var pensionerdetails = _dbContext.Pensioners.Select(p => new PensionerRegister
             {
                 PensionerId=p.PensionerId,
                 First_name = p.First_name,
@@ -106,6 +118,17 @@ namespace PensionManagement1.Controllers
         [HttpGet("GettingPensionerByid")]
         public IActionResult PensionerListById(int Pensionerid)
         {
+            Pensioner w = _dbContext.Pensioners.Find(Pensionerid);
+            if(w == null)
+            {
+                return NotFound("Pensioner Not Found");
+            }
+
+            RetirementPlan RP = _dbContext.RetirementPlans.FirstOrDefault(r => r.PlanId == w.PlanId);
+            if(RP == null)
+            {
+                return NotFound("Plan Not Found");
+            }
            
             var pensionerdetails = _dbContext.Pensioners.Where(p => p.PensionerId == Pensionerid).Select(p => new PensionerDetails
             {   PensionerId=p.PensionerId,
@@ -118,6 +141,9 @@ namespace PensionManagement1.Controllers
                 Retirement_date = p.Retirement_date,
                 Salary = p.Salary,
                 PlanId = p.PlanId,
+                PlanName= RP.PlanName,
+                PlanDescription= RP.PlanDescription,
+
             }).ToList();
             if (pensionerdetails.Count == 0)
             {
@@ -128,7 +154,7 @@ namespace PensionManagement1.Controllers
         }
         //Update Pensioner Details
         [HttpPut("UpdatePensioner")]
-        public IActionResult PensionerUpdate(int Pensionerid, PensionerDetails cp)
+        public IActionResult PensionerUpdate(int Pensionerid, PensionerRegister cp)
         {
 
             var CurrentPensioner = _dbContext.Pensioners.Find(Pensionerid);
@@ -153,7 +179,6 @@ namespace PensionManagement1.Controllers
         }
 
         //Delete Pensioner 
-        [Authorize]
         [HttpDelete("DeletePensioner")]
         public IActionResult PensionDelete(int id)
         {
@@ -167,6 +192,38 @@ namespace PensionManagement1.Controllers
             return Ok("Pensioner Deleted Successfully");
 
         }
+        [HttpGet("CheckingPlan")]
+        public IActionResult CheckPlan(int PensionerId)
+        {
+            Pensioner w = _dbContext.Pensioners.Find(PensionerId);
+            if (w == null)
+            {
+                return NotFound("Pensioner Not Found");
+            }
+
+            RetirementPlan RP = _dbContext.RetirementPlans.FirstOrDefault(r => r.PlanId == w.PlanId);
+            if (RP == null)
+            {
+                return NotFound("Plan Not Found");
+            }
+            var plan= _dbContext.Pensioners.Where(p => p.PensionerId == PensionerId).Select(p => new RetirementPlandetails
+            {
+                PlanId = p.PlanId,
+                PlanName = RP.PlanName,
+                PlanDescription = RP.PlanDescription,
+            }).ToList();
+            if (plan.Count == 0)
+            {
+                return NotFound("No Plan Found");
+            }
+
+            return Ok(plan);
+
+
+        } 
+
+
+
 
 
     }

@@ -142,16 +142,14 @@ namespace PensionManagement1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanId"));
 
-                    b.Property<int>("AdminId")
-                        .HasColumnType("int");
+                    b.Property<string>("PlanDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlanName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PlanId");
-
-                    b.HasIndex("AdminId");
 
                     b.ToTable("RetirementPlans");
                 });
@@ -211,17 +209,6 @@ namespace PensionManagement1.Migrations
                     b.Navigation("Admin");
 
                     b.Navigation("RetirementPlan");
-                });
-
-            modelBuilder.Entity("PensionManagement1.Models.DbsetModel.RetirementPlan", b =>
-                {
-                    b.HasOne("PensionManagement1.Models.DbsetModel.Admin", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("PensionManagement1.Models.PensionPayout", b =>

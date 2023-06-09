@@ -12,11 +12,6 @@ namespace PensionManagement1.Controllers
     {
         PensionContext _dbContext = new PensionContext();
 
-        private IConfiguration _config;
-        public BeneficaryController(IConfiguration config)
-        {
-            _config = config;
-        }
         //Adding Beneficary By Pensioner Id
         [HttpPost("AddingBeneficiary")]
         public IActionResult AddBeneficiary(int Pensionerid,BeneficaryDetail beneficary)
@@ -36,7 +31,6 @@ namespace PensionManagement1.Controllers
             return Ok("Beneficary Added Successfully");
         }
         //Getting Beneficary By Pensioner Id
-        [Authorize]
         [HttpGet("[action]")]
         public IActionResult GetBeneficary(int PensionerId)
         {
@@ -85,7 +79,6 @@ namespace PensionManagement1.Controllers
 
 
         //Deleting Beneficary By Pensioner Id
-        [Authorize]
         [HttpDelete("Delete BeneficaryByPensionerId")]
         public IActionResult DeleteBeneficary(int PensionerId,int Beneficaryid) 
         {

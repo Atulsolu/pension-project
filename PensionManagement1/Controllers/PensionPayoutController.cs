@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PensionManagement1.Context;
 using PensionManagement1.Models;
+using PensionManagement1.Models.DbsetModel;
 using PensionManagement1.Models.ViewModel;
+using System.Linq;
 
 namespace PensionManagement1.Controllers
 {
@@ -10,26 +12,29 @@ namespace PensionManagement1.Controllers
     public class PensionPayoutController : ControllerBase
     {
         PensionContext _dbContext=new PensionContext();
-        private IConfiguration _config;
-        public  PensionPayoutController( IConfiguration config)
-        {
-            
-            _config=config;
-        }
+    
         //Adding Pensioner Payment
         [HttpPost("[action]")]
         public IActionResult AddingPensionerPayment(int Pensionerid, PensionPayoutdetail Payout)
         {
-            var Pensionee = _dbContext.Pensioners.Find(Pensionerid);
-            if(Pensionee == null) 
+            Pensioner w = _dbContext.Pensioners.Find(Pensionerid);
+            if (w == null)
             {
                 return NotFound("Pensioner Not Found");
             }
+            Pensioner pensioner = _dbContext.Pensioners.FirstOrDefault(p => p.PensionerId == Pensionerid);
+            RetirementPlan RP = _dbContext.RetirementPlans.FirstOrDefault(r => r.PlanId == w.PlanId);
             var payment = new PensionPayout();
             payment.PensionerId = Payout.PensionerId;
-            payment.PayoutAmount = Payout.PayoutAmount;
+            if (RP.PlanId == 1)
+            {
+                payment.PayoutAmount = (int)(pensioner.Salary * 0.4);
+            }
+            else if(RP.PlanId == 2)
+            {
+                payment.PayoutAmount = (int)(pensioner.Salary * 0.5);
+            }
             payment.PayoutDate = Payout.PayoutDate;
-            payment.TotalAmount = Payout.TotalAmount;
             _dbContext.PensionPayouts.Add(payment);
             _dbContext.SaveChanges();
             return Ok("Payment Added Successfully");
@@ -51,7 +56,7 @@ namespace PensionManagement1.Controllers
                     PensionerId = b.PensionerId,
                     PayoutAmount = b.PayoutAmount,
                     PayoutDate = b.PayoutDate,
-                    TotalAmount = b.TotalAmount
+                   
                 }).ToList();
             if (payment.Count == 0)
             {

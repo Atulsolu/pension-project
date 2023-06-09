@@ -9,6 +9,7 @@ namespace PensionManagement1.Models.DbsetModel
         public int PlanId { get; set; }
         [Required]
         public string PlanName { get; set; }
+        public string PlanDescription { get; set; }
      
 
 

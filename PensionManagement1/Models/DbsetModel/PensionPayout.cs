@@ -10,7 +10,6 @@ namespace PensionManagement1.Models
         [Key]
         public int PayoutId { get; set; }
         public int PayoutAmount { get; set;} 
-        public long TotalAmount { get; set; }
         public DateTime PayoutDate { get; set;}
 
         [ForeignKey("Pensioner")]

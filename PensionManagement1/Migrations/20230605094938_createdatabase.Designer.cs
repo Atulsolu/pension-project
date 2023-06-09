@@ -12,7 +12,7 @@ using PensionManagement1.Context;
 namespace PensionManagement1.Migrations
 {
     [DbContext(typeof(PensionContext))]
-    [Migration("20230530131247_createdatabase")]
+    [Migration("20230605094938_createdatabase")]
     partial class createdatabase
     {
         /// <inheritdoc />
@@ -144,6 +144,9 @@ namespace PensionManagement1.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanId"));
+
+                    b.Property<string>("PlanDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlanName")
                         .IsRequired()

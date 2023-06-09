@@ -10,11 +10,7 @@ namespace PensionManagement1.Controllers
     public class RetirementPlanController : ControllerBase
     {
         public PensionContext _dbContext=new PensionContext();
-        private IConfiguration _config;
-        public RetirementPlanController(IConfiguration config)
-        {
-            _config=config;
-        }
+
         //Getting Plans
         [HttpGet("[action]")]
         public IActionResult GettingPlan(int Planid) 
@@ -28,6 +24,7 @@ namespace PensionManagement1.Controllers
             {
                 PlanId = p.PlanId,
                 PlanName = p.PlanName,
+                PlanDescription = p.PlanDescription,
               
 
             }).ToList();
@@ -39,6 +36,7 @@ namespace PensionManagement1.Controllers
         {
             var plan=new RetirementPlan();
             plan.PlanName=retirementPlan.PlanName;
+            plan.PlanDescription = retirementPlan.PlanDescription;
            
             _dbContext.RetirementPlans.Add(plan);
             _dbContext.SaveChanges();
@@ -55,6 +53,7 @@ namespace PensionManagement1.Controllers
             }
             var plan1 = _dbContext.RetirementPlans.Find(Planid);
             plan1.PlanName=retirementPlan.PlanName;
+            plan1.PlanDescription = retirementPlan.PlanDescription;
           
             _dbContext.SaveChanges();
             return Ok("Plan Updated Successfully");

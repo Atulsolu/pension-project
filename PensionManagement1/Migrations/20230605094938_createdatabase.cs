@@ -31,7 +31,8 @@ namespace PensionManagement1.Migrations
                 {
                     PlanId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlanDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
