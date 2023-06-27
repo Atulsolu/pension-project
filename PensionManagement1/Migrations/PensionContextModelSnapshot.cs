@@ -171,8 +171,8 @@ namespace PensionManagement1.Migrations
                     b.Property<int>("PensionerId")
                         .HasColumnType("int");
 
-                    b.Property<long>("TotalAmount")
-                        .HasColumnType("bigint");
+                    b.Property<string>("PensionerName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PayoutId");
 

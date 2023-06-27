@@ -1,0 +1,601 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.App {
+
+  text-align: center;
+
+}
+
+
+
+
+.App-logo {
+
+  height: 40vmin;
+
+  pointer-events: none;
+
+}
+
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .App-logo {
+
+    animation: App-logo-spin infinite 20s linear;
+
+  }
+
+}
+
+
+
+
+.App-header {
+
+  background-color: #282c34;
+
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: calc(10px + 2vmin);
+
+  color: white;
+
+}
+
+
+
+
+.App-link {
+
+  color: #61dafb;
+
+}
+
+
+
+
+@keyframes App-logo-spin {
+
+  from {
+
+    transform: rotate(0deg);
+
+  }
+
+  to {
+
+    transform: rotate(360deg);
+
+  }
+
+}
+
+/* body{
+
+  background-image: url(./Images/bgImage.jpg);
+
+  background-size: cover;
+
+   height: 105vh;
+
+   width: 100%;
+
+   margin-top: -70px;
+
+   font-size: 50px;
+
+   background-repeat: no-repeat;
+
+
+
+
+} */
+
+/* MenuSummary CSS */
+
+
+
+
+.summary {
+
+
+
+
+  text-align: center;
+
+
+
+
+  max-width: 45rem;
+
+
+
+
+  width: 90%;
+
+
+
+
+  margin: auto;
+
+
+
+
+  margin-top: 5rem;
+
+
+
+
+  position: relative;
+
+
+
+
+  background-color: #383838;
+
+
+
+
+  color: white;
+
+
+
+
+  border-radius: 14px;
+
+
+
+
+  padding: 1rem;
+
+
+
+
+  box-shadow: 0 1px 18px 10px rgba(0, 0, 0, 0.25);
+
+
+
+
+}
+
+
+
+
+
+
+
+.summary h2 {
+
+
+
+
+  font-size: 2rem;
+
+
+
+
+  margin-top: 0;
+
+
+
+
+}
+
+
+
+
+/* Available Menu */
+
+
+
+
+.ameals {
+
+
+
+
+  max-width: 60rem;
+
+
+
+
+  width: 90%;
+
+
+
+
+  margin: 2rem auto;
+
+
+
+
+  animation: meals-appear 1s ease-out forwards;
+
+
+
+
+}
+
+
+
+
+
+
+
+.ameals ul {
+
+
+
+
+  list-style: none;
+
+
+
+
+  margin: 0;
+
+
+
+
+  padding: 0;
+
+
+
+
+}
+
+
+
+
+
+
+
+@keyframes meals-appear {
+
+
+
+
+  from {
+
+
+
+
+    opacity: 0;
+
+
+
+
+    transform: translateY(3rem);
+
+
+
+
+  }
+
+
+
+
+
+
+
+  to {
+
+
+
+
+    opacity: 1;
+
+
+
+
+    transform: translateY(0);
+
+
+
+
+  }
+
+
+
+
+}
+
+
+
+
+
+
+
+/* Menu Item Form */
+
+
+
+
+.form {
+
+
+
+
+  text-align: right;
+
+
+
+
+}
+
+
+
+
+
+
+
+.form button {
+
+
+
+
+  font: inherit;
+
+
+
+
+  cursor: pointer;
+
+
+
+
+  background-color: #8a2b06;
+
+
+
+
+  border: 1px solid #8a2b06;
+
+
+
+
+  color: white;
+
+
+
+
+  padding: 0.25rem 2rem;
+
+
+
+
+  border-radius: 20px;
+
+
+
+
+  font-weight: bold;
+
+
+
+
+}
+
+
+
+
+
+
+
+.form button:hover,
+
+
+
+
+.form button:active {
+
+
+
+
+  background-color: #641e03;
+
+
+
+
+  border-color: #641e03;
+
+
+
+
+}
+
+
+
+
+/* Menu Item css */
+
+
+
+
+.meal {
+
+
+
+
+  display: flex;
+
+
+
+
+  justify-content: space-between;
+
+
+
+
+  margin: 1rem;
+
+
+
+
+  padding-bottom: 1rem;
+
+
+
+
+  border-bottom: 1px solid #ccc;
+
+
+
+
+}
+
+
+
+
+
+
+
+.meal h3 {
+
+
+
+
+  margin: 0 0 0.25rem 0;
+
+
+
+
+}
+
+
+
+
+
+
+
+.description {
+
+
+
+
+  font-style: italic;
+
+
+
+
+}
+
+
+
+
+
+
+
+.price {
+
+
+
+
+  margin-top: 0.25rem;
+
+
+
+
+  font-weight: bold;
+
+
+
+
+  color: #ad5502;
+
+
+
+
+  font-size: 1.25rem;
+
+
+
+
+}
+
+
+
+
+
+
+
+/* Card Css */
+
+
+
+
+.card {
+
+
+
+
+  padding: 1rem;
+
+
+
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+
+
+
+  border-radius: 14px;
+
+
+
+
+  background-color: white;
+
+
+
+
+}

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PensionManagement1.Context;
+using PensionManagement1.Models.ViewModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -23,14 +24,14 @@ namespace PensionManagement1.Controllers
         }
         [HttpPost("[action]")]
        
-        public IActionResult AdminLogin(string Email,string Password)
+        public IActionResult AdminLogin(PensionerLogin adml)
         {
-            var CurrentAdmin=_dbContext.Admins.FirstOrDefault(a=>a.Admin_Email==Email);
-            if(CurrentAdmin.Admin_Email != Email)
+            var CurrentAdmin=_dbContext.Admins.FirstOrDefault(a=>a.Admin_Email==adml.Email);
+            if(CurrentAdmin.Admin_Email != adml.Email)
             {
                 return NotFound("Admin Not Found");
             }
-            if(CurrentAdmin.Admin_Password != Password)
+            if(CurrentAdmin.Admin_Password != adml.Password)
             {
                 return NotFound("Incorrect Password");
             }
@@ -38,7 +39,8 @@ namespace PensionManagement1.Controllers
             var Credntials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256);
             var Claims = new[]
             {
-                new Claim(ClaimTypes.Email,Email),
+                new Claim(ClaimTypes.Role,"Admin"),
+                new Claim(ClaimTypes.Email,adml.Email),
             };
             var Token = new JwtSecurityToken(
                 issuer: _config["JWT:Issuer"],

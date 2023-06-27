@@ -28,7 +28,7 @@ namespace PensionManagement1.Controllers
             var PensionerExist=_dbContext.Pensioners.FirstOrDefault(p=>p.Pensioner_Email==pensioner.Pensioner_Email);
             if (PensionerExist!=null)
             {
-                return Ok("Pensioner Already Registered");
+                return StatusCode(409, "Pensioner Already Registered");
             }
             // var Admin = _dbContext.Admins.Find(1);
             // pensioner.Admin= Admin;
@@ -44,7 +44,7 @@ namespace PensionManagement1.Controllers
             Newpensioner.Salary=pensioner.Salary;
             Newpensioner.AdminId=pensioner.AdminId;
             TimeSpan ts = pensioner.Retirement_date - pensioner.DOJ;
-            if (ts.TotalDays / 365 > 25)
+            if (ts.TotalDays / 365 > 20)
             {
                 Newpensioner.PlanId = 1;
             }
@@ -62,24 +62,26 @@ namespace PensionManagement1.Controllers
         }
         //PensionerLogin
         [HttpPost("[action]")]
-        public IActionResult PensionerLogin(string Email, string Password) 
+        public IActionResult PensionerLogin(PensionerLogin pen) 
         {
-            var Currentpensioner = _dbContext.Pensioners.FirstOrDefault(p => p.Pensioner_Email == Email);
+            var Currentpensioner = _dbContext.Pensioners.FirstOrDefault(p => p.Pensioner_Email == pen.Email);
                 
                    if(Currentpensioner.Pensioner_Email==null)
                    {
                     return NotFound("Pensioner Not Found");
                    }
-                   if(Currentpensioner.Pensioner_Password != Password)
+                   if(Currentpensioner.Pensioner_Password != pen.Password)
                    {
                     return NotFound("Incorrect Password");
                    }
 
                    var SecurityKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:KEY"]));
                    var Credentials=new SigningCredentials(SecurityKey,SecurityAlgorithms.HmacSha256);
-                   var Claims=new[]
-                   {
-                       new Claim(ClaimTypes.Email,Email)
+            var Claims = new[]
+            {
+                       new Claim(ClaimTypes.Role,"Pensioner"),
+                       new Claim(ClaimTypes.Email,pen.Email),
+                       new Claim("PensionerId",(Currentpensioner.PensionerId).ToString()),
                    };
                    var token = new JwtSecurityToken(
                    issuer: _config["JWT:Issuer"],
@@ -91,6 +93,7 @@ namespace PensionManagement1.Controllers
                    return Ok(new { Token = jwt, Message = "Pensioner Login Successfully" });      
         }
         //Getting Pensioner List
+        //[Authorize(Roles = "Admin")]
         [HttpGet("PensionerList")]
         public IActionResult PensionerList()
         {
@@ -154,10 +157,10 @@ namespace PensionManagement1.Controllers
         }
         //Update Pensioner Details
         [HttpPut("UpdatePensioner")]
-        public IActionResult PensionerUpdate(int Pensionerid, PensionerRegister cp)
+        public IActionResult PensionerUpdate( PensionerRegister cp)
         {
 
-            var CurrentPensioner = _dbContext.Pensioners.Find(Pensionerid);
+            var CurrentPensioner = _dbContext.Pensioners.Find(cp.PensionerId);
             if (CurrentPensioner != null)
             {
                 CurrentPensioner.PensionerId = cp.PensionerId;
@@ -169,7 +172,7 @@ namespace PensionManagement1.Controllers
                 CurrentPensioner.DOJ = cp.DOJ;
                 CurrentPensioner.Retirement_date = cp.Retirement_date;
                 CurrentPensioner.Salary = cp.Salary;
-                CurrentPensioner.PlanId = cp.PlanId;
+                CurrentPensioner.AdminId = cp.AdminId;
                     _dbContext.SaveChanges();
                 return Ok("Pensioner Updated Successfully");
             }
@@ -179,7 +182,8 @@ namespace PensionManagement1.Controllers
         }
 
         //Delete Pensioner 
-        [HttpDelete("DeletePensioner")]
+        [Authorize(Roles ="Admin")]
+        [HttpDelete("DeletePensioner/{id}")]
         public IActionResult PensionDelete(int id)
         {
             var pensionerlistbyid = _dbContext.Pensioners.Find(id);

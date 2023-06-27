@@ -64,7 +64,7 @@ namespace PensionManagement1.Models.DbsetModel
         public RetirementPlan RetirementPlan { get; set;}
 
         [ForeignKey("Admin")]
-        public int AdminId { get; set; }
+        public int AdminId { get; set; } = 1;
         public Admin Admin { get; set; }
 
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PensionManagement1.Context;
 using PensionManagement1.Models.DbsetModel;
@@ -14,9 +15,9 @@ namespace PensionManagement1.Controllers
 
         //Adding Beneficary By Pensioner Id
         [HttpPost("AddingBeneficiary")]
-        public IActionResult AddBeneficiary(int Pensionerid,BeneficaryDetail beneficary)
+        public IActionResult AddBeneficiary(BeneficaryDetail beneficary)
         {
-            var Pensioner = _dbContext.Pensioners.Find(Pensionerid);
+            var Pensioner = _dbContext.Pensioners.Find(beneficary.PensionerId);
             if (Pensioner == null) 
             {
                 return NotFound("Pensioner Not Exist");
@@ -56,8 +57,9 @@ namespace PensionManagement1.Controllers
 
         }
         //Update Beneficary
-        [HttpPut("UpdateBeneficaryByPensionerId")]
-        public IActionResult UpdatePensioner(int PensionerId,int BeneficaryId,BeneficaryDetail ben)
+        [Authorize(Roles = "Pensioner")]
+        [HttpPut("UpdateBeneficaryByPensionerId/{PensionerId}/{BeneficaryId}")]
+        public IActionResult UpdatePensioner(int PensionerId,int BeneficaryId,[FromBody]BeneficaryDetail ben)
         {
 
             var CurrentBeneficary = _dbContext.Beneficaries.FirstOrDefault(b => b.PensionerId == PensionerId && b.BeneficaryId == BeneficaryId);
@@ -75,11 +77,9 @@ namespace PensionManagement1.Controllers
 
 
         }
-
-
-
         //Deleting Beneficary By Pensioner Id
-        [HttpDelete("Delete BeneficaryByPensionerId")]
+        [Authorize(Roles = "Pensioner")]
+        [HttpDelete("DeleteBeneficaryByPensionerId/{PensionerId}/{Beneficaryid}")]
         public IActionResult DeleteBeneficary(int PensionerId,int Beneficaryid) 
         {
             var CurrentPensioner = _dbContext.Pensioners.Find(PensionerId);

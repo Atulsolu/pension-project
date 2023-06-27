@@ -1,0 +1,25 @@
+.container { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .box-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .box {
+    background-color: #343a40;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  
+  .box:hover {
+    background-color: #212529;
+  }

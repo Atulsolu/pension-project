@@ -14,8 +14,8 @@ namespace PensionManagement1.Models.ViewModel
         public DateTime DOJ { get; set; }
         public DateTime Retirement_date { get; set; }
         public int Salary { get; set; }
-       
-        public int AdminId { get; set; }
+
+        public int AdminId { get; set; } = 1;
         [JsonIgnore]
         public int PlanId { get; set; }
 

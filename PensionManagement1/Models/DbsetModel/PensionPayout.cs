@@ -10,6 +10,8 @@ namespace PensionManagement1.Models
         [Key]
         public int PayoutId { get; set; }
         public int PayoutAmount { get; set;} 
+
+        public string PensionerName { get; set; }
         public DateTime PayoutDate { get; set;}
 
         [ForeignKey("Pensioner")]

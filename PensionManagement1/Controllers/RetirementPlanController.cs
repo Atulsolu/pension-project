@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PensionManagement1.Context;
 using PensionManagement1.Models.DbsetModel;
 using PensionManagement1.Models.ViewModel;
@@ -13,14 +14,9 @@ namespace PensionManagement1.Controllers
 
         //Getting Plans
         [HttpGet("[action]")]
-        public IActionResult GettingPlan(int Planid) 
+        public IActionResult GettingPlan() 
         {
-            var plan=_dbContext.RetirementPlans.Find(Planid);
-            if (plan == null)
-            {
-                return NotFound("Plan Not Found");
-            }
-            var Plan1=_dbContext.RetirementPlans.Where(p=>p.PlanId == Planid).Select(p => new RetirementPlandetails 
+            var Plan1=_dbContext.RetirementPlans.Select(p => new RetirementPlandetails 
             {
                 PlanId = p.PlanId,
                 PlanName = p.PlanName,
@@ -31,6 +27,7 @@ namespace PensionManagement1.Controllers
             return Ok(Plan1);
         }
         //Adding Plans
+        [Authorize(Roles = "Admin")]
         [HttpPost("[action]")]
         public IActionResult AddingPlan(RetirementPlandetails retirementPlan)
         {
@@ -43,6 +40,7 @@ namespace PensionManagement1.Controllers
             return Ok("Plan Added Successfully");
         }
         //Updating Plans
+        [Authorize(Roles = "Admin")]
         [HttpPut("[action]")]
         public IActionResult UpdatingPlan( int Planid,RetirementPlandetails retirementPlan)
         {
@@ -58,8 +56,8 @@ namespace PensionManagement1.Controllers
             _dbContext.SaveChanges();
             return Ok("Plan Updated Successfully");
         }
-
-        [HttpDelete("[action]")]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeletePlan/{Planid}")]
         public IActionResult DeletePlan(int Planid) 
         {
             var plan = _dbContext.RetirementPlans.Find(Planid);
