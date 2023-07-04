@@ -46,11 +46,11 @@ namespace PensionManagement1.Controllers
             TimeSpan ts = pensioner.Retirement_date - pensioner.DOJ;
             if (ts.TotalDays / 365 > 20)
             {
-                Newpensioner.PlanId = 1;
+                Newpensioner.PlanId = 1004;
             }
             else
             {
-                Newpensioner.PlanId = 2;
+                Newpensioner.PlanId = 1005;
             }
            
            
@@ -66,7 +66,7 @@ namespace PensionManagement1.Controllers
         {
             var Currentpensioner = _dbContext.Pensioners.FirstOrDefault(p => p.Pensioner_Email == pen.Email);
                 
-                   if(Currentpensioner.Pensioner_Email==null)
+                   if(Currentpensioner==null)
                    {
                     return NotFound("Pensioner Not Found");
                    }
@@ -167,7 +167,7 @@ namespace PensionManagement1.Controllers
                 CurrentPensioner.First_name = cp.First_name;
                 CurrentPensioner.Last_name = cp.Last_name;
                 CurrentPensioner.Gender = cp.Gender;
-                CurrentPensioner.Pensioner_Email = cp.Pensioner_Email;
+                CurrentPensioner.Pensioner_Password = cp.Pensioner_Password;
                 CurrentPensioner.DOB = cp.DOB;
                 CurrentPensioner.DOJ = cp.DOJ;
                 CurrentPensioner.Retirement_date = cp.Retirement_date;

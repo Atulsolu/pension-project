@@ -1,38 +1,48 @@
-import { useEffect,useState } from "react"
+import React, { useEffect, useState } from "react"; 
+import Admnav from "../../Layout/AdminNav"
 import axios from 'axios';
-import  '../../App.css';
-import displayPlan from "./DisplayPlan";
-import JWT from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-const GetPlan= () =>{
-    const[List,setList]=useState([]);
-    const navigate=useNavigate();
-    const abc = localStorage.getItem('admintoken');
-    var decoded = JWT(abc);
-    useEffect(()=>{
-        axios.get(`https://localhost:7130/api/RetirementPlan/GettingPlan`,decoded,{
-            headers:{
-                'Authorization': `Bearer ${abc}`
-            }
-            })
-            .then((res)=>{
-                console.log(res.data);
-                setList(res.data);
-    
-        })
-    
-        },[]);
-        console.log(List);
-        const planlist=List.map(menu=>
-            <displayPlan
-            pid={menu.PlanId}
-            pname={menu.PlanName}
-            pdesc={menu.planDescription}
-            />);
-            return(
-                <>
-                {displayPlan}
-                </>);
-    
+import '../../App.css';
+import DisplayPlan from "./DisplayPlan";
+
+const GetPlan = () => {
+  const [list, setList] = useState([]);
+  const abc = localStorage.getItem('admintoken');
+
+  useEffect(() => {
+    axios.get("https://localhost:7130/api/RetirementPlan/GettingPlan", {
+      headers: {
+        'Authorization': `Bearer ${abc}`
+      }
+    })
+    .then((res) => {
+      console.log(res.data);
+      setList(res.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }, []);
+  console.log(list);
+
+
+  const planList = list.map((menu) => (
+    <DisplayPlan
+     
+      planId={menu.planId}
+      planName={menu.planName}
+      planDescription={menu.planDescription}
+      
+    />
+  ));
+
+  return (
+    <>
+    <Admnav></Admnav>
+      <ul>
+        {planList}
+      </ul>
+    </>
+  );
 }
+
 export default GetPlan;

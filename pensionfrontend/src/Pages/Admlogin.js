@@ -29,41 +29,55 @@ export default function Admlogin() {
 
   return (
     <div>
-    <section className="vh-100 gradient-custom">
-        <div className="container py-5 h-100">
+    <section className="h-40 gradient-form" style={{ backgroundcolor: "#eee" }}>
+        <div className="container py-5 h-40">
             <div className="row d-flex justify-content-center align-items-center h-100">
-                <div className="col-12 col-md-8 col-lg-6 col-xl-12">
-                    <div className="card bg-dark text-white" style={{ borderRadius: '1rem' }}>
-                        <div className="card-body p-5 text-center">
+                <div className="col-xl-10">
+                    <div className="card rounded-3 text-black">
+                        <div className="row g-0">
+                            <div className="col-lg-6">
+                                <div className="card-body p-md-5 mx-md-4">
 
-                            <div className="mb-md-5 mt-md-4 pb-5">
+                                    <div className="text-center">
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                            style={{ width: "185px" }} alt="logo" />
+                                        <h4 className="mt-1 mb-5 pb-1">Admin Login</h4>
+                                    </div>
 
-                                <h2 className="fw-bold mb-2 text-uppercase">Admin Login</h2>
-                                <p className="text-white-50 mb-5">Please enter your login and password!</p>
+                                    <form>
+                                        <p>Please login to your account</p>
 
-                                <div className="form-outline form-white mb-4">
-                                    <input type="email" id="typeEmailX" className="form-control form-control-lg" ref={emailref} />
-                                    <label className="form-label" htmlFor="typeEmailX">Email</label>
+                                        <div className="form-outline mb-4">
+                                            <input type="email" id="typeEmailX" className="form-control"
+                                                placeholder="email address" ref={emailref} />
+                                            <label className="form-label" for="form2Example11">Email</label>
+                                        </div>
+
+                                        <div className="form-outline mb-4">
+                                            <input type="password" id="typePasswordX" className="form-control" placeholder="Password"  ref={passwordref} />
+                                            <label className="form-label" for="form2Example22">Password</label>
+                                        </div>
+
+                                        <div className="text-center pt-1 mb-5 pb-1">
+                                            <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button" onClick={submithandle}>Log
+                                                in</button>
+                                        </div>
+                                    </form>
                                 </div>
-
-                                <div className="form-outline form-white mb-4">
-                                    <input type="password" id="typePasswordX" className="form-control form-control-lg" ref={passwordref} />
-                                    <label className="form-label" htmlFor="typePasswordX">Password</label>
+                            </div>
+                            <div className="col-lg-6 d-flex align-items-center gradient-custom-2">
+                                <div className="text-white px-3 py-4 p-md-5 mx-md-4">
+                                    <h4 className="mb-4">We are more than just a company</h4>
+                                    <p className="small mb-0"> Designed By Atul</p>
                                 </div>
-
-                                <button className="btn btn-outline-light btn-lg px-5" type="button" onClick={submithandle}>Login</button>
-
                             </div>
-
-                            <div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 </div>
   )
 }

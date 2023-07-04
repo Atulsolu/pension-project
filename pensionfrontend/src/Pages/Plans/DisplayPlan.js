@@ -1,43 +1,46 @@
-import '../../App.css';
-import { useRef } from 'react';
+import React from 'react'; 
 import axios from 'axios';
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const DisplayPlan = (props) => {
-    console.log(props.data);
-    const abc = localStorage.getItem('admintoken');
-    console.log(props);
-    function del(){
-    axios.delete(`https://localhost:7130/api/RetirementPlan/DeletePlan/${props.pid}`, {
+  const abc = localStorage.getItem('admintoken');
+  const navigate=useNavigate();
 
-        headers:{
-
-            'Authorization': `Bearer ${abc}`
-
-        }
-
+  const deletePlan = () => {
+    axios.delete(`https://localhost:7130/api/RetirementPlan/DeletePlan/${props.planId}`, {
+      headers: {
+        'Authorization': `Bearer ${abc}`
+      }
     })
     .then((response) => {
-            alert('Plan deleted successfully');
-            console.log(response);
-        });
-    }
-return (
+      alert('Plan deleted successfully');
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  function updatePlan(){
+        localStorage.setItem('planid',props.planId);
+        navigate('/updateplan');
+  }
+
+
+
+
+  return (
     <>
-
-        <li className="meal">
-            <div>
-                <h3>{props.pid} {props.pname}</h3>
-                <div className="description">{props.pdesc}</div>
-                <form className="form">
-                    <button className="mx-2" onClick={del}>Delete</button>
-                    <button >Update</button>
-                </form>
-            </div>
-        </li>
-
+      <li className="pensioner">
+        <div>
+          <h3>{props.planId} {props.planName}</h3>
+          <div className="description"> Pensioner got {props.planDescription} % of salary</div>
+          <form className="form">
+            <button className="mx-2" onClick={deletePlan}>Delete</button>
+            <button onClick={updatePlan}>Update</button>
+          </form>
+        </div>
+      </li>
     </>
-);
-
+  );
 }
+
 export default DisplayPlan;

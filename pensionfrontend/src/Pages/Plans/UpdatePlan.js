@@ -1,43 +1,40 @@
 import React from 'react'
 import Axios from 'axios';
-import Admnav from "../../Layout/AdminNav"
 import { useState } from 'react';
-import './Payment.css';
+import Admnav from "../../Layout/AdminNav"
+import './plan.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function Payment() {
+export default function UpdatePlan() {
     const Navigate=useNavigate();
-    const [pensionerid, setPid] = useState('');
-    const [PensionerName, setPname] = useState('');
-    const [date, setDate] = useState('');
-    const p = localStorage.getItem("admintoken");
+    const [PlanName, setpname] = useState('');
+    const [PlanDescription, setDes] = useState('');
+    const p=localStorage.getItem("admintoken");
+    const p1=localStorage.getItem('planid');
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!pensionerid || !PensionerName || !date) {
+        if (!PlanName || ! PlanDescription) {
             alert('Please fill in all fields.');
             return;
         }
-        Axios.post("https://localhost:7130/api/PensionPayout/PaymentByPensionerId", {
+        Axios.put(`https://localhost:7130/api/RetirementPlan/UpdatingPlan?Planid=${p1}`, {
 
-            pensionerId: pensionerid,
-            pensionerName: PensionerName,
-            payoutDate: date
-        }, {
-            headers: {
-                'Authorization': `Bearer ${p}`
+            planName: PlanName,
+            planDescription: PlanDescription,
+        },{
+            headers:{
+                'Authorization':`Bearer ${p}`
             }
-        }
+        }       
         ).then((response) => {
             console.log(response);
             if (response.status === 200) {
-                alert("Payment sent sucessfully");
-                Navigate("/adminpage")
+                alert("Plan Updated sucessfully");
+                Navigate("/getplan")
             }
         }).catch((error) => {
 
             if (error.response && error.response.status === 404) {
-                alert('Pensioner Not Found.');
-            } else {
                 alert('An error occurred. Please try again.');
             }
             console.log(error);
@@ -56,25 +53,21 @@ export default function Payment() {
                                 <div className="card-body p-5 text-center">
 
                                     <div className="mb-md-5 mt-md-4 pb-5">
-                                        <h2 className="text-uppercase text-center mb-5">Send Payment</h2>
+                                        <h2 className="text-uppercase text-center mb-5">Update Plan</h2>
 
                                         <form onSubmit={handleSubmit}>
 
                                             <div className="form-outline mb-4">
-                                                <input type="number" id="formPenid" className="form-control form-control-lg" name='Pensioner_id' value={pensionerid} onChange={(e) => setPid(e.target.value)} />
-                                                <label className="form-label" htmlFor="formPenid">Pensioner Id</label>
+                                                <input type="text" id="formPenid" className="form-control form-control-lg" name='Pensioner_plan' value={PlanName} onChange={(e) => setpname(e.target.value)} />
+                                                <label className="form-label" htmlFor="formPenid">Plan Name</label>
                                             </div>
                                             <div className="form-outline mb-4">
-                                                <input type="text" id="form2Example1cg" className="form-control form-control-lg" name='pen_name' value={PensionerName} onChange={(e) => setPname(e.target.value)} />
-                                                <label className="form-label" htmlFor="form2Example1cg">Pensioner Name</label>
-                                            </div>
-                                            <div className="form-outline mb-4">
-                                                <input type="date" id="dob" className="form-control form-control-lg" name='Dob' value={date} onChange={(e) => setDate(e.target.value)} />
-                                                <label className="form-label" htmlFor="dob">Payment Date</label>
+                                                <input type="text" id="form2Example1cg" className="form-control form-control-lg" name='pen_name' value={PlanDescription} onChange={(e) => setDes(e.target.value)} />
+                                                <label className="form-label" htmlFor="form2Example1cg">Plan Description</label>
                                             </div>
                                             <div className="d-flex justify-content-center">
                                                 <button onClick={handleSubmit}
-                                                    className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Send</button>
+                                                    className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Update</button>
                                             </div>
                                         </form>
                                     </div>

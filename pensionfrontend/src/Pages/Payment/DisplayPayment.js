@@ -1,22 +1,20 @@
 import '../../App.css';
-import { useNavigate } from 'react-router-dom';
+
 export default function DisplayPayment(props) {
-    console.log(props.data);
     console.log(props);
+
     return (
         <>
-            <li className="meal">
-                <div>
-                    <h3>{props.pensionerid} {props.pensionerName}</h3>
-                    <div className="description">{props.pid} {props.amount}</div>
-                    <div className="price">{props.date}</div>
-                </div>
-            </li>
-            <form className="form">
-                        <button className="mx-2" onClick="/pensionerpage">Delete</button>
-                    </form>
-
+       
+        <li className="pensioner">
+            <div>
+                <h3>Id:-{props.pensionerid}</h3>
+                <h3>  Name:-{props.pname}</h3>
+                <div className="description">Payment Id:-{props.pid}</div>
+                <div> <b>Amount:-</b>{props.amount} </div>
+                <div className="date"><b>Payment Date:-</b>{props.date}</div>
+            </div>
+        </li>
         </>
-
     );
 }

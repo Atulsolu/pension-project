@@ -20,7 +20,7 @@ namespace PensionManagement1.Controllers
         public IActionResult AddingPensionerPayment([FromBody]PensionPayoutdetail Payout)
         {
             Pensioner w = _dbContext.Pensioners.Find(Payout.PensionerId);
-            
+            var p = _dbContext.RetirementPlans.Find(w.PlanId);
             if (w == null)
             {
                 return StatusCode(404,"Pensioner Not Found");
@@ -29,13 +29,13 @@ namespace PensionManagement1.Controllers
             RetirementPlan RP = _dbContext.RetirementPlans.FirstOrDefault(r => r.PlanId == w.PlanId);
             var payment = new PensionPayout();
             payment.PensionerId = Payout.PensionerId;
-            if (RP.PlanId == 1)
+            if (RP.PlanId == 1004)
             {
-                payment.PayoutAmount = (int)(pensioner.Salary * 0.5);
+                payment.PayoutAmount = (int)(pensioner.Salary * int.Parse(p.PlanDescription) /100);
             }
-            else if(RP.PlanId == 2)
+            else if(RP.PlanId == 1005)
             {
-                payment.PayoutAmount = (int)(pensioner.Salary * 0.4);
+                payment.PayoutAmount = (int)(pensioner.Salary * int.Parse(p.PlanDescription)/100);
             }
             payment.PayoutDate = Payout.PayoutDate;
             payment.PensionerName = Payout.PensionerName;

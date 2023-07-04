@@ -2,9 +2,10 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import '../Styles/Signup.css';
-import { NavLink, } from 'react-router-dom';
+import { NavLink, useNavigate, } from 'react-router-dom';
 
 export default function Signup() {
+  const Navigate=useNavigate();
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
@@ -35,7 +36,9 @@ export default function Signup() {
       console.log(response);
       if (response.status === 200) {
         alert("Pensioner Registered Sucessfully");
+        Navigate("/");
       }
+      
     }).catch((error) => {
       if (error.response && error.response.status === 409) {
         alert('Pensioner already registered.');
@@ -49,37 +52,37 @@ export default function Signup() {
 
   return (
     <div>
-      <section className="vh-100 gradient-custom">
-        <div className="container py-5 h-100">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-10 col-md-15 col-lg-12 col-xl-15">
-              <div className="card bg-dark text-white" style={{ borderRadius: '1rem' }}>
-                <div className="card-body p-5 text-center">
+      <section className="vh-100 bg-image">
+  <div className="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div className="container h-100">
+      <div className="row d-flex justify-content-center align-items-center h-100">
+        <div className="col-12 col-md-15 col-lg-12 col-xl-15">
+          <div className="card" style={{borderradius: "15px"}}>
+            <div className="card-body p-5">
+              <h2 className="text-uppercase text-center mb-5">Create an account</h2>
 
-                  <div className="mb-md-5 mt-md-4 pb-5">
-                    <h2 className="text-uppercase text-center mb-5">Create an account</h2>
+              <form onSubmit={handleSubmit}>
 
-                    <form onSubmit={handleSubmit}>
-
-                      <div className="form-outline mb-4">
-                        <input type="text" id="form3Example1cg" className="form-control form-control-lg" name='First_name' value={fname} onChange={(e) => setFname(e.target.value)} autoComplete="given-name" />
-                        <label className="form-label" htmlFor="form3Example1cg">First Name</label>
-                      </div>
-                      <div className="form-outline mb-4">
+                <div className="form-outline mb-4">
+                  <input type="text" id="form3Example1cg" className="form-control form-control-lg"  name='First_name' value={fname} onChange={(e) => setFname(e.target.value)} autoComplete="given-name"/>
+                  <label className="form-label" for="form3Example1cg">First Name</label>
+                </div>
+                <div className="form-outline mb-4">
                         <input type="text" id="form2Example1cg" className="form-control form-control-lg" name='Last_name' value={lname} onChange={(e) => setLname(e.target.value)} />
                         <label className="form-label" htmlFor="form2Example1cg">Last Name</label>
                       </div>
+                <div className="form-outline mb-4">
+                  <input type="email" id="form3Example3cg" className="form-control form-control-lg" name='Pensioner_Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                  <label className="form-label" for="form3Example3cg">Your Email</label>
+                </div>
 
-                      <div className="form-outline mb-4">
-                        <input type="email" id="form4Example1cg" className="form-control form-control-lg" name='Pensioner_Email' value={email} onChange={(e) => setEmail(e.target.value)} />
-                        <label className="form-label" htmlFor="form4Example1cg">Email</label>
-                      </div>
+                <div className="form-outline mb-4">
+                  <input type="password" id="form3Example4cg" className="form-control form-control-lg" name='Pensioner_Password' value={pass} onChange={(e) => setPass(e.target.value)} />
+                  <label className="form-label" for="form3Example4cg">Password</label>
+                </div>
 
-                      <div className="form-outline mb-4">
-                        <input type="password" id="form5Example1cg" className="form-control form-control-lg" name='Pensioner_Password' value={pass} onChange={(e) => setPass(e.target.value)} />
-                        <label className="form-label" htmlFor="form5Example1cg">Password</label>
-                      </div>
-                      <div className="form-outline mb-4">
+                
+                <div className="form-outline mb-4">
                         <input type="date" id="dob" className="form-control form-control-lg" name='Dob' value={Dob} onChange={(e) => setDOB(e.target.value)} />
                         <label className="form-label" htmlFor="dob">DOB</label>
                       </div>
@@ -103,23 +106,23 @@ export default function Signup() {
                         </select>
                         <label className="form-label" htmlFor="formGender">Gender</label>
                       </div>
-                      <div className="d-flex justify-content-center">
-                        <button type="submit"
-                          className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Sign Up</button>
-                      </div>
-                      <div>
-                        <p className="mb-0">Already have an account? <NavLink className="text-white-50 fw-bold" to="/login">Login</NavLink>
-                        </p>
-                      </div>
-                    </form>
-
-                  </div>
+                <div className="d-flex justify-content-center">
+                  <button type="submit"
+                    className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
                 </div>
-              </div>
+
+                <p className="text-center text-muted mt-5 mb-0">Have already an account? <NavLink
+                    className="fw-bold text-body" to="/login"><u>Login here</u></NavLink></p>
+
+              </form>
+
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
     </div>
   )
 }

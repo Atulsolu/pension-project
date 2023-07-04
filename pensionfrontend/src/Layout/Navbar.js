@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaRightToBracket, FaUser } from 'react-icons/fa6';
+import { GrUserAdmin } from "react-icons/gr";
 import '../Styles/Navbar.css';
 import { NavLink, Outlet } from 'react-router-dom';
 
@@ -39,7 +40,7 @@ const Navbar = () => {
                                 <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
                                     <li>
                                         <NavLink className="dropdown-item" to="/admin">
-                                            Admin Login
+                                           <GrUserAdmin/> Admin Login
                                         </NavLink>
                                     </li>
                                     <li>
