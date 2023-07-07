@@ -6,7 +6,9 @@ export default function Pensionerpage() {
     return (
         <>
             <PenNav></PenNav>
-            <h1> Welcome to Pensioner Page</h1>
+            <div className='d-flex justify-content-center text-white'>
+            <h1 > Welcome </h1>
+            </div>
             <div class="container">
                 <div class="box-container">
                     <NavLink className="box" to="/beneficary"><h3>Beneficary</h3>

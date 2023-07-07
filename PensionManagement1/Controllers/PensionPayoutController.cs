@@ -62,7 +62,7 @@ namespace PensionManagement1.Controllers
                     PayoutAmount = b.PayoutAmount,
                     PayoutDate = b.PayoutDate,
                    
-                }).ToList();
+                }).OrderByDescending(x => x.PayoutId).ToList();
             if (payment.Count == 0)
             {
                 return StatusCode(404,"No Payment Found");

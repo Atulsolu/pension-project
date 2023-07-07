@@ -3,9 +3,11 @@ import Pennav from "../../Layout/PensionerNav";
 import axios from 'axios';
 import DisplayBeneficary from './DisplayBeneficary';
 import  '../../App.css';
+import { useNavigate } from "react-router-dom";
 import JWT from "jwt-decode";
 const GetBeneficary = () => {
     const [List,setList]=useState([]);
+    const navigate = useNavigate();
     const abc=localStorage.getItem("pensionertoken");
     console.log(abc);
     var decoded=JWT(abc)
@@ -24,6 +26,7 @@ const GetBeneficary = () => {
 
     }).catch((error) => {
           alert(' No Beneficary Found.');
+          navigate('/pensionerpage');
         console.log(error);
       })
 

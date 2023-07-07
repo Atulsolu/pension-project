@@ -48,7 +48,7 @@ namespace PensionManagement1.Controllers
                     BeneficaryFirstName = b.BeneficaryFirstName,
                     BeneficaryLastName = b.BeneficaryLastName,
                     BeneficaryRelation = b.Relation
-                }).ToList();
+                }).OrderByDescending(x => x.BeneficaryId).ToList();
             if(beneficary.Count==0)
             {
                 return NotFound("No Beneficary Found");

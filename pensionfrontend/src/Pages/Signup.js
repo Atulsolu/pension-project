@@ -36,7 +36,7 @@ export default function Signup() {
       console.log(response);
       if (response.status === 200) {
         alert("Pensioner Registered Sucessfully");
-        Navigate("/");
+        Navigate("/login");
       }
       
     }).catch((error) => {

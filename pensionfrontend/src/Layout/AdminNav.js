@@ -16,10 +16,11 @@ export default function AdminNav() {
                         <li className="nav-item">
                                 <NavLink className="nav-link" to="/adminpage">Home</NavLink>
                             </li>
-                            <li className="nav-item ms-auto">
-                                <button className="nav-link  " onClick={logout}>Logout <IoMdLogOut/></button>
-                            </li>
                         </ul>
+                        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <button className="nav-link" style={{float:"right"}} onClick={logout}>Logout <IoMdLogOut/></button>
+                        </ul>
+                        
                     </div>
                 </div>
             </nav>

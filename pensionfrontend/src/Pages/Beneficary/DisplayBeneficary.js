@@ -39,10 +39,13 @@ const DisplayBeneficary = (props) => {
                 <div>
                     <h3>{props.bid} {props.fname} {props.lname}</h3>
                     <div className="description">{props.rel}</div>
-                    <form className="form">
-                        <button className="mx-2" onClick={rr}>Delete</button>
-                        <button onClick={Updatebeneficary}>Update</button>
-                    </form>
+                    <div>
+                        <button className="btn btn-danger mx-3 my-2" onClick={rr}>Delete</button>
+                        
+                        <button  className="btn btn-info"  onClick={Updatebeneficary}>Update</button>
+                        
+                    </div>
+                    
                 </div>
             </li>
             

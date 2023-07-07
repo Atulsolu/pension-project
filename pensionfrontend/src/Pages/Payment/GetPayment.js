@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import Pennav from "../../Layout/PensionerNav"
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import DisplayPayment from "./DisplayPayment";
 import JWT from 'jwt-decode';
 import '../../App.css';
 
 const GetPayment = () => {
     const [list, setList] = useState([]);
+    const navigate = useNavigate();
     const p = localStorage.getItem("pensionertoken");
     const d = JWT(p);
 
@@ -18,6 +20,7 @@ const GetPayment = () => {
             })
             .catch((error) => {
                 alert(' No Payment Found.');
+                navigate('/pensionerpage');
                 console.log(error);
             });
     }, []);

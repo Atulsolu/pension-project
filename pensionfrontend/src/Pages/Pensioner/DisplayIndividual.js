@@ -22,8 +22,8 @@ const DisplayIndividual = (props) => {
                     <div className="description"><b>DOJ:-</b>{props.doj}</div>
                     <div className="description"><b>Retirement Date:-</b>{props.rdate}</div>
                     <div className="description"><b>Salary:-</b>{props.sal}</div>
-                    <form className="form">
-                        <button onClick={Updatedetails}>Update</button>
+                    <form className="my-3">
+                        <button class="btn btn-info" onClick={Updatedetails}>Update</button>
                     </form>
                 </div>
             </li>

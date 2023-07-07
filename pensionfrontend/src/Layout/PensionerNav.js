@@ -12,14 +12,14 @@ export default function PensionerNav(){
             <div className="container-fluid">
                 <div className="navbar-brand" >Pensioner Page</div>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
                     <li className="nav-item">
                                 <NavLink className="nav-link" to="/pensionerpage">Home</NavLink>
                             </li>
-                        <li className="nav-item">
-                            <button className="nav-link" onClick={logout}>Logout <IoMdLogOut/></button>
-                        </li>
                     </ul>
+                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <button className="nav-link" onClick={logout}>Logout <IoMdLogOut/></button>
+                        </ul>
                 </div>
             </div>
         </nav>

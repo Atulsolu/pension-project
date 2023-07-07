@@ -109,7 +109,7 @@ namespace PensionManagement1.Controllers
                 Retirement_date = p.Retirement_date,
                 Salary = p.Salary,
                 PlanId = p.PlanId,
-            }).ToList();
+            }).OrderByDescending(x => x.PensionerId).ToList();
             if (pensionerdetails.Count == 0)
             {
                 return NotFound("No Pensioner Found");

@@ -23,7 +23,7 @@ namespace PensionManagement1.Controllers
                 PlanDescription = p.PlanDescription,
               
 
-            }).ToList();
+            }).OrderByDescending(x => x.PlanId).ToList();
             return Ok(Plan1);
         }
         //Adding Plans
